@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - Agri Nova</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(16, 185, 129, 0.8), rgba(15, 23, 42, 0.8)), url('https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=1974&auto=format&fit=crop');">
+        
+        <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12 w-full max-w-md">
+            
+            <div class="text-center mb-8">
+                <a href="index.html" class="inline-block text-3xl font-extrabold text-emerald-600 mb-2">
+                    <i class="fa-solid fa-leaf mr-2"></i>Agri Nova
+                </a>
+                <h1 class="text-2xl font-bold text-gray-800">Welcome Back!</h1>
+                <p class="text-gray-500">Log in to access your dashboard.</p>
+            </div>
+
+            <!-- Log In Form -->
+            <form id="loginForm">
+                <div class="space-y-4">
+                     <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your 10-digit mobile number" required class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                     <div>
+                        <div class="flex justify-between items-center">
+                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                            <a href="#" class="text-sm text-emerald-600 hover:underline">Forgot password?</a>
+                        </div>
+                        <input type="password" id="password" name="password" placeholder="••••••••" required class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-emerald-700 transition duration-300">
+                        Log In
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account? <a href="sign up.html" class="font-semibold text-emerald-600 hover:underline">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle form submission
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real application, you would send the login data to your server here.
+            alert('Login successful! (This is a demo)');
+            // Example: window.location.href = 'sensor.html';
+        });
+    </script>
+
+</body>
+</html>

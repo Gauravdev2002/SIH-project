@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri Nova - Pest Control Dashboard</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Chart.js for beautiful charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Custom font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* A softer background color */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="flex h-screen">
+        <!-- === SIDE NAVIGATION === -->
+        <aside class="w-64 bg-white shadow-lg flex flex-col">
+            <div class="p-6 text-2xl font-bold text-emerald-700 border-b">
+                 <a href="index.html"><i class="fa-solid fa-leaf mr-2"></i>Agri Nova</a>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="sensor.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-sliders w-6 mr-3"></i>Sensors
+                </a>
+                <a href="soil.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-seedling w-6 mr-3"></i>Soil Health
+                </a>
+                <a href="pest.html" class="flex items-center p-3 rounded-lg text-white bg-emerald-600 font-semibold shadow">
+                    <i class="fa-solid fa-bug w-6 mr-3"></i>Pest Control
+                </a>
+                <a href="weather.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-cloud-sun-rain w-6 mr-3"></i>Weather
+                </a>
+                <a href="alerts.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bell w-6 mr-3"></i>Alerts
+                </a>
+            </nav>
+            <div class="p-4 border-t">
+                 <a href="#" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-right-from-bracket w-6 mr-3"></i>Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- === MAIN CONTENT === -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Header section -->
+            <header class="flex flex-wrap justify-between items-center gap-4 mb-8">
+                <div>
+                    <h1 class="text-4xl font-bold">Pest Control</h1>
+                    <p class="text-gray-500 mt-1">Monitor and manage pest activity across your fields.</p>
+                </div>
+                 <div class="flex items-center gap-4">
+                    <div id="date-time" class="text-right text-gray-600">
+                        <div class="font-semibold text-lg">Saturday, 13 Sep 2025</div>
+                        <div class="text-sm">11:38 AM</div>
+                    </div>
+                     <a href="gps.html" class="bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-emerald-700 transition duration-300 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot"></i> Your Location
+                    </a>
+                </div>
+            </header>
+
+            <!-- Main Dashboard Grid -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left Column -->
+                <div class="lg:col-span-1 space-y-6">
+                    <article class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-4">Pests Detected</h2>
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="pest-item p-2 rounded-lg hover:bg-gray-100">
+                                <img src="aphid.png" alt="Aphid" class="mx-auto mb-2 rounded-full">
+                                <p class="text-sm font-medium">Aphid</p>
+                            </div>
+                            <div class="pest-item p-2 rounded-lg hover:bg-gray-100">
+                                <img src="whitefly.png" alt="Whitefly" class="mx-auto mb-2 rounded-full">
+                                <p class="text-sm font-medium">Whitefly</p>
+                            </div>
+                            <div class="pest-item p-2 rounded-lg hover:bg-gray-100">
+                                <img src="borer.png" alt="Borer" class="mx-auto mb-2 rounded-full">
+                                <p class="text-sm font-medium">Borer</p>
+                            </div>
+                            <div class="pest-item p-2 rounded-lg hover:bg-gray-100">
+                                <img src="aphid.png" alt="Mite" class="mx-auto mb-2 rounded-full">
+                                <p class="text-sm font-medium">Mite</p>
+                            </div>
+                             <div class="pest-item p-2 rounded-lg hover:bg-gray-100">
+                                <img src="whitefly.png" alt="Locust" class="mx-auto mb-2 rounded-full">
+                                <p class="text-sm font-medium">Locust</p>
+                            </div>
+                             <div class="pest-item p-2 rounded-lg hover:bg-gray-100">
+                                <img src="borer.png" alt="Weevil" class="mx-auto mb-2 rounded-full">
+                                <p class="text-sm font-medium">Weevil</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-2">Affected Area</h2>
+                        <div class="flex items-center justify-between">
+                            <p id="affected-percentage" class="text-4xl font-bold text-red-500">18%</p>
+                            <p class="text-sm text-gray-500">of total crop area</p>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+                            <div id="affected-progress" class="bg-red-500 h-2.5 rounded-full" style="width: 18%"></div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Middle Column -->
+                <div class="lg:col-span-1 space-y-6">
+                     <article class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-4">Pest Population Trend</h2>
+                        <canvas id="pestTrendChart"></canvas>
+                    </article>
+                     <article class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-4">Spray Schedule</h2>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-blue-100 text-blue-600 p-2 rounded-lg"><i class="fa-solid fa-sun"></i></div>
+                                <div>
+                                    <p class="font-semibold">Morning Spray</p>
+                                    <p class="text-sm text-gray-500">Completed at 7:30 AM</p>
+                                </div>
+                                <i class="fa-solid fa-check-circle text-green-500 ml-auto"></i>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                 <div class="bg-indigo-100 text-indigo-600 p-2 rounded-lg"><i class="fa-solid fa-moon"></i></div>
+                                <div>
+                                    <p class="font-semibold">Evening Spray</p>
+                                    <p class="text-sm text-gray-500">Scheduled for 6:00 PM</p>
+                                </div>
+                                 <i class="fa-solid fa-clock text-gray-400 ml-auto"></i>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- Right Column -->
+                <div class="lg:col-span-1 space-y-6">
+                    <article class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-4">Actionable Recommendations</h2>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-4">
+                                <div class="bg-red-100 text-red-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                <p class="text-sm text-gray-600">Aphid infestation in Zone B. Apply biocontrol (ladybugs) within 48 hrs.</p>
+                            </li>
+                             <li class="flex items-start gap-4">
+                                <div class="bg-yellow-100 text-yellow-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-cloud-rain"></i></div>
+                                <p class="text-sm text-gray-600">High humidity favors fungal pests. Preventive fungicide recommended.</p>
+                            </li>
+                             <li class="flex items-start gap-4">
+                                <div class="bg-green-100 text-green-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-shield-halved"></i></div>
+                                <p class="text-sm text-gray-600">Reduce pesticide in Zone C (below threshold) to avoid resistance.</p>
+                            </li>
+                        </ul>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md p-6">
+                         <h2 class="text-xl font-semibold mb-4">Pest Distribution</h2>
+                         <canvas id="pestDistributionChart"></canvas>
+                     </article>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+    // === Live Date & Time ===
+    function updateDateTime() {
+        const now = new Date();
+        const dateEl = document.querySelector('#date-time .font-semibold');
+        const timeEl = document.querySelector('#date-time .text-sm');
+        if(dateEl && timeEl) {
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+            dateEl.textContent = now.toLocaleDateString('en-US', options);
+            timeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+    
+    // === Chart.js Initializations ===
+    const trendCtx = document.getElementById('pestTrendChart').getContext('2d');
+    const pestTrendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Pest Sightings',
+                data: [12, 19, 3, 5, 2, 3, 9],
+                borderColor: 'rgb(239, 68, 68)',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    const distCtx = document.getElementById('pestDistributionChart').getContext('2d');
+    const pestDistributionChart = new Chart(distCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Aphids', 'Whiteflies', 'Borers', 'Mites'],
+            datasets: [{
+                label: 'Distribution',
+                data: [45, 25, 15, 15],
+                backgroundColor: [
+                    'rgb(239, 68, 68)',
+                    'rgb(249, 115, 22)',
+                    'rgb(234, 179, 8)',
+                    'rgb(132, 204, 22)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+
+</script>
+
+</body>
+</html>
+

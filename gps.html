@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS to Address Finder</title>
+    
+    <!-- Leaflet.js CSS for the interactive map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        #map { 
+            height: 300px; /* Adjusted height for the new layout */
+            border-radius: 0.5rem;
+            margin-top: 1.5rem; /* Increased margin */
+            border: 1px solid #e5e7eb;
+        }
+        /* Simple spinning animation for the loader */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="min-h-screen bg-cover bg-center flex items-center justify-center p-4" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1593395028383-705d394b9a3c?q=80&w=2070&auto=format&fit=crop');">
+        
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full transform transition-all duration-500" id="main-card">
+            
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center">
+                <div class="loader mx-auto"></div>
+                <h1 class="text-2xl font-bold text-gray-800 mt-4">Finding Your Location</h1>
+                <p id="statusText" class="text-gray-600 mt-2">Please allow location access when your browser asks.</p>
+            </div>
+
+            <!-- Result State -->
+            <div id="resultState" class="hidden">
+                 <h1 class="text-3xl font-bold text-gray-800 text-center mb-6">Location Found!</h1>
+                
+                <!-- Div to display the location information -->
+                <div id="locationInfo" class="p-4 bg-gray-50 rounded-lg text-left">
+                    <div class="flex items-start">
+                        <i class="fa-solid fa-map-pin text-blue-500 text-2xl mt-1 mr-4"></i>
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-700">Your Address:</h2>
+                            <p id="address" class="text-gray-800"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Div where the Leaflet map will be rendered -->
+                <div id="map"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Leaflet.js JavaScript for the interactive map -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+    <script>
+        const loadingState = document.getElementById('loadingState');
+        const resultState = document.getElementById('resultState');
+        const statusText = document.getElementById('statusText');
+        const addressP = document.getElementById('address');
+        const mapDiv = document.getElementById('map');
+        let map; // Variable to hold the map instance
+
+        // This function runs automatically when the page loads
+        function findAddressOnLoad() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(getAddressFromCoordinates, handleLocationError);
+            } else {
+                handleError("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // This function is called with the GPS coordinates
+        async function getAddressFromCoordinates(position) {
+            statusText.textContent = 'Found your coordinates. Now finding address...';
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data && data.display_name) {
+                    const displayName = data.display_name;
+                    showPositionOnMap(lat, lon, displayName);
+                } else {
+                    handleError("Could not find an address for your location.");
+                }
+            } catch (error) {
+                console.error('Error fetching address:', error);
+                handleError("Could not retrieve address. Please check your connection.");
+            }
+        }
+        
+        // This function displays the final result on the map
+        function showPositionOnMap(lat, lon, displayName) {
+            // Switch from loading view to result view
+            loadingState.classList.add('hidden');
+            resultState.classList.remove('hidden');
+
+            // 1. Display the found address as text
+            addressP.innerHTML = `<b>${displayName}</b>`;
+            
+            // 2. Display the location on an interactive map
+            if (!map) {
+                map = L.map('map').setView([lat, lon], 16);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+            } else {
+                map.setView([lat, lon], 16);
+            }
+            
+            // Add a marker to the map at the user's location
+            L.marker([lat, lon]).addTo(map)
+                .bindPopup('You are here!')
+                .openPopup();
+        }
+
+        // This function is called if a geolocation error occurs
+        function handleLocationError(error) {
+            let message = "An unknown error occurred.";
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    message = "You denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    message = "The request to get user location timed out."
+                    break;
+            }
+            handleError(message);
+        }
+
+        // This function displays a generic error message
+        function handleError(message) {
+            const loader = document.querySelector('.loader');
+            if (loader) loader.style.display = 'none'; // Hide spinner
+            statusText.innerHTML = `<span class="text-red-500 font-semibold">${message}</span>`;
+        }
+
+        // Start the process as soon as the page is loaded
+        findAddressOnLoad();
+    </script>
+
+</body>
+</html>
+

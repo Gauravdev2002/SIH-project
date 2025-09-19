@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri Nova - Weather Dashboard</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Chart.js for beautiful charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Custom font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* A softer background color */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="flex h-screen">
+        <!-- === SIDE NAVIGATION === -->
+        <aside class="w-64 bg-white shadow-lg flex flex-col">
+            <div class="p-6 text-2xl font-bold text-emerald-700 border-b">
+                 <a href="index.html"><i class="fa-solid fa-leaf mr-2"></i>Agri Nova</a>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="sensor.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-sliders w-6 mr-3"></i>Sensors
+                </a>
+                <a href="soil.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-seedling w-6 mr-3"></i>Soil Health
+                </a>
+                <a href="pest.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bug w-6 mr-3"></i>Pest Control
+                </a>
+                <a href="weather.html" class="flex items-center p-3 rounded-lg text-white bg-emerald-600 font-semibold shadow">
+                    <i class="fa-solid fa-cloud-sun-rain w-6 mr-3"></i>Weather
+                </a>
+                <a href="alerts.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bell w-6 mr-3"></i>Alerts
+                </a>
+            </nav>
+            <div class="p-4 border-t">
+                 <a href="#" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-right-from-bracket w-6 mr-3"></i>Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- === MAIN CONTENT === -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Header section -->
+            <header class="flex flex-wrap justify-between items-center gap-4 mb-8">
+                <div>
+                    <h1 class="text-4xl font-bold">Weather Dashboard</h1>
+                    <p class="text-gray-500 mt-1">Live conditions and forecasts for your fields.</p>
+                </div>
+                 <div class="flex items-center gap-4">
+                    <div id="date-time" class="text-right text-gray-600">
+                        <div class="font-semibold text-lg">Saturday, 13 Sep 2025</div>
+                        <div class="text-sm">11:41 AM</div>
+                    </div>
+                     <a href="gps.html" class="bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-emerald-700 transition duration-300 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot"></i> Your Location
+                    </a>
+                </div>
+            </header>
+
+            <!-- KPI Cards -->
+            <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+                <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center">
+                    <div class="text-orange-500 text-3xl mb-2"><i class="fa-solid fa-temperature-half"></i></div>
+                    <p class="text-sm text-gray-500">Temperature</p>
+                    <p class="text-4xl font-bold mt-1">30<span class="text-2xl">°C</span></p>
+                </div>
+                 <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center">
+                    <div class="text-cyan-500 text-3xl mb-2"><i class="fa-solid fa-droplet"></i></div>
+                    <p class="text-sm text-gray-500">Humidity</p>
+                    <p class="text-4xl font-bold mt-1">55<span class="text-2xl">%</span></p>
+                </div>
+                <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center">
+                    <div class="text-blue-500 text-3xl mb-2"><i class="fa-solid fa-wind"></i></div>
+                    <p class="text-sm text-gray-500">Wind Speed</p>
+                    <p class="text-4xl font-bold mt-1">15<span class="text-lg"> km/h</span></p>
+                </div>
+                <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center">
+                    <div class="text-indigo-500 text-3xl mb-2"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+                    <p class="text-sm text-gray-500">Rainfall</p>
+                    <p class="text-4xl font-bold mt-1">2.5<span class="text-lg"> mm</span></p>
+                </div>
+                <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center flex flex-col justify-center">
+                    <div class="text-yellow-500 text-3xl mb-2"><i class="fa-solid fa-sun"></i></div>
+                    <p class="text-sm text-gray-500">Solar Radiation</p>
+                    <p class="text-4xl font-bold mt-1">320<span class="text-lg"> W/m²</span></p>
+                </div>
+            </section>
+
+            <!-- Main Dashboard Grid -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                 <!-- Left Column: Chart and Recommendations -->
+                <div class="lg:col-span-2 space-y-6">
+                     <article class="bg-white rounded-xl shadow-md p-6">
+                         <h2 class="text-xl font-semibold mb-4">Temperature & Humidity Trend</h2>
+                         <canvas id="tempHumidityChart"></canvas>
+                     </article>
+                      <article class="bg-white rounded-xl shadow-md p-6">
+                         <h2 class="text-xl font-semibold mb-4">Recommendations</h2>
+                         <ul class="space-y-4">
+                            <li class="flex items-start gap-4">
+                                <div class="bg-blue-100 text-blue-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-wind"></i></div>
+                                <p class="text-sm text-gray-600">High wind speeds expected tomorrow morning. Secure any loose equipment.</p>
+                            </li>
+                             <li class="flex items-start gap-4">
+                                <div class="bg-indigo-100 text-indigo-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+                                <p class="text-sm text-gray-600">Heavy rainfall forecasted for Sunday. Ensure proper field drainage to prevent waterlogging.</p>
+                            </li>
+                             <li class="flex items-start gap-4">
+                                <div class="bg-yellow-100 text-yellow-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-sun"></i></div>
+                                <p class="text-sm text-gray-600">High solar radiation this week. Monitor crops for signs of sun scorch.</p>
+                            </li>
+                        </ul>
+                     </article>
+                </div>
+                
+                <!-- Right Column: Forecast -->
+                <article class="lg:col-span-1 bg-white rounded-xl shadow-md p-6">
+                    <h2 class="text-xl font-semibold mb-4">8-Day Forecast</h2>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                            <p class="font-semibold w-12">Wed</p>
+                            <i class="fa-solid fa-cloud-sun text-2xl text-yellow-500 w-10 text-center"></i>
+                            <p class="text-sm text-gray-500">Partly Cloudy</p>
+                            <p class="font-semibold text-right w-20">25° / 13°</p>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                            <p class="font-semibold w-12">Thu</p>
+                            <i class="fa-solid fa-sun text-2xl text-yellow-400 w-10 text-center"></i>
+                            <p class="text-sm text-gray-500">Sunny</p>
+                            <p class="font-semibold text-right w-20">27° / 15°</p>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                            <p class="font-semibold w-12">Fri</p>
+                            <i class="fa-solid fa-cloud text-2xl text-gray-400 w-10 text-center"></i>
+                            <p class="text-sm text-gray-500">Cloudy</p>
+                            <p class="font-semibold text-right w-20">24° / 14°</p>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                            <p class="font-semibold w-12">Sat</p>
+                            <i class="fa-solid fa-sun text-2xl text-yellow-400 w-10 text-center"></i>
+                            <p class="text-sm text-gray-500">Sunny</p>
+                            <p class="font-semibold text-right w-20">23° / 16°</p>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                            <p class="font-semibold w-12">Sun</p>
+                            <i class="fa-solid fa-cloud-rain text-2xl text-blue-500 w-10 text-center"></i>
+                            <p class="text-sm text-gray-500">Rain</p>
+                            <p class="font-semibold text-right w-20">23° / 13°</p>
+                        </div>
+                         <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                            <p class="font-semibold w-12">Mon</p>
+                            <i class="fa-solid fa-cloud-rain text-2xl text-blue-500 w-10 text-center"></i>
+                            <p class="text-sm text-gray-500">Rain</p>
+                            <p class="font-semibold text-right w-20">21° / 12°</p>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                            <p class="font-semibold w-12">Tue</p>
+                            <i class="fa-solid fa-sun text-2xl text-yellow-400 w-10 text-center"></i>
+                            <p class="text-sm text-gray-500">Sunny</p>
+                            <p class="font-semibold text-right w-20">29° / 17°</p>
+                        </div>
+                         <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                            <p class="font-semibold w-12">Wed</p>
+                            <i class="fa-solid fa-sun text-2xl text-yellow-400 w-10 text-center"></i>
+                            <p class="text-sm text-gray-500">Sunny</p>
+                            <p class="font-semibold text-right w-20">29° / 17°</p>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+<script>
+    // === Live Date & Time ===
+    function updateDateTime() {
+        const now = new Date();
+        const dateEl = document.querySelector('#date-time .font-semibold');
+        const timeEl = document.querySelector('#date-time .text-sm');
+        if(dateEl && timeEl) {
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+            dateEl.textContent = now.toLocaleDateString('en-US', options);
+            timeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+    
+    // === Chart.js Initializations ===
+    const trendCtx = document.getElementById('tempHumidityChart').getContext('2d');
+    const tempHumidityChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: ['6 AM', '9 AM', '12 PM', '3 PM', '6 PM', '9 PM'],
+            datasets: [{
+                label: 'Temperature (°C)',
+                data: [22, 26, 30, 28, 25, 23],
+                borderColor: 'rgb(249, 115, 22)',
+                backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                fill: true,
+                tension: 0.4,
+                yAxisID: 'y'
+            }, {
+                label: 'Humidity (%)',
+                data: [80, 70, 55, 60, 75, 85],
+                borderColor: 'rgb(59, 130, 246)',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                fill: true,
+                tension: 0.4,
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'top' } },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: { display: true, text: 'Temperature (°C)' }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: { display: true, text: 'Humidity (%)' },
+                    grid: { drawOnChartArea: false } // only want the grid lines for one axis
+                }
+            }
+        }
+    });
+
+</script>
+
+</body>
+</html>
+

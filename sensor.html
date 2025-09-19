@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri Nova Sensor Dashboard</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* Custom font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* A softer background color */
+        }
+        /* Custom glowing effect for the status dot */
+        .status-dot-active {
+            box-shadow: 0 0 8px #10b981, 0 0 12px #10b981;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+         /* Sidebar transition */
+        #mobile-sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="flex h-screen">
+        <!-- === DESKTOP SIDE NAVIGATION === -->
+        <aside class="w-64 bg-white shadow-lg flex-col hidden md:flex">
+            <div class="p-6 text-2xl font-bold text-emerald-700 border-b">
+                <a href="index.html"><i class="fa-solid fa-leaf mr-2"></i>Agri Nova</a>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="sensor.html" class="flex items-center p-3 rounded-lg text-white bg-emerald-600 font-semibold shadow">
+                    <i class="fa-solid fa-sliders w-6 mr-3"></i>Sensor
+                </a>
+                <a href="soil.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-seedling w-6 mr-3"></i>Soil Health
+                </a>
+                <a href="pest.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bug w-6 mr-3"></i>Pest Control
+                </a>
+                <a href="weather.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-cloud-sun-rain w-6 mr-3"></i>Weather
+                </a>
+                <a href="alerts.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bell w-6 mr-3"></i>Alerts
+                </a>
+            </nav>
+            <div class="p-4 border-t">
+                 <a href="#" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-right-from-bracket w-6 mr-3"></i>Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- === MOBILE SIDE NAVIGATION (New Feature) === -->
+        <div id="mobile-sidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg flex-col z-30 transform -translate-x-full md:hidden">
+            <div class="p-6 text-2xl font-bold text-emerald-700 border-b">
+                <a href="index.html"><i class="fa-solid fa-leaf mr-2"></i>Agri Nova</a>
+            </div>
+             <nav class="flex-1 p-4 space-y-2">
+                <a href="sensor.html" class="flex items-center p-3 rounded-lg text-white bg-emerald-600 font-semibold shadow">
+                    <i class="fa-solid fa-sliders w-6 mr-3"></i>Sensor
+                </a>
+                <a href="soil.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-seedling w-6 mr-3"></i>Soil Health
+                </a>
+                <a href="pest.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bug w-6 mr-3"></i>Pest Control
+                </a>
+                <a href="weather.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-cloud-sun-rain w-6 mr-3"></i>Weather
+                </a>
+                <a href="alerts.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bell w-6 mr-3"></i>Alerts
+                </a>
+            </nav>
+             <div class="p-4 border-t">
+                 <a href="#" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-right-from-bracket w-6 mr-3"></i>Logout
+                </a>
+            </div>
+        </div>
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+
+
+        <!-- === MAIN CONTENT === -->
+        <div class="flex-1 flex flex-col">
+             <!-- Top Bar for Mobile -->
+             <header class="md:hidden flex justify-between items-center p-4 bg-white shadow-md">
+                <button id="hamburger-btn" class="text-gray-800 focus:outline-none">
+                     <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+                 <div class="text-xl font-bold text-emerald-700">
+                    <a href="index.html"><i class="fa-solid fa-leaf mr-2"></i>Agri Nova</a>
+                </div>
+                 <div></div>
+             </header>
+
+            <main class="flex-1 p-4 sm:p-8 overflow-y-auto">
+                <!-- Header section -->
+                <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-bold">Sensor Dashboard</h1>
+                        <p class="text-gray-500 mt-1">Real-time data from your fields.</p>
+                    </div>
+                    <div class="flex items-center gap-4 w-full sm:w-auto">
+                        <div id="date-time" class="text-right text-gray-600">
+                            <div class="font-semibold text-base sm:text-lg">Saturday, 13 Sep 2025</div>
+                            <div class="text-xs sm:text-sm">11:26 AM</div>
+                        </div>
+                        <a href="gps.html" class="bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-emerald-700 transition duration-300 flex items-center gap-2">
+                           <i class="fa-solid fa-location-dot"></i>
+                           <span class="hidden sm:inline">Your Location</span>
+                        </a>
+                    </div>
+                </header>
+
+                <!-- Sensor Grid -->
+                <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                    <!-- Sensor Card 1 -->
+                    <article class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Sensor Alpha-1</h2>
+                            <div class="w-3 h-3 bg-emerald-500 rounded-full status-dot-active"></div>
+                        </div>
+                        <div class="flex justify-between items-start text-center gap-2">
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">Temperature</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">21°C</span>
+                            </div>
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">Humidity</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">80%</span>
+                            </div>
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">pH Level</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">6.2</span>
+                            </div>
+                        </div>
+                        <p class="last-updated text-xs text-gray-400 mt-6 text-center">Last Updated: <span class="font-semibold">Just now</span></p>
+                    </article>
+                    <!-- Sensor Card 2 -->
+                     <article class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Sensor Beta-2</h2>
+                            <div class="w-3 h-3 bg-emerald-500 rounded-full status-dot-active"></div>
+                        </div>
+                        <div class="flex justify-between items-start text-center gap-2">
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">Temperature</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">25°C</span>
+                            </div>
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">Humidity</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">75%</span>
+                            </div>
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">pH Level</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block text-orange-500">5.1</span>
+                            </div>
+                        </div>
+                        <p class="last-updated text-xs text-gray-400 mt-6 text-center">Last Updated: <span class="font-semibold">Just now</span></p>
+                    </article>
+                    <!-- Sensor Card 3 -->
+                     <article class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Sensor Gamma-3</h2>
+                            <div class="w-3 h-3 bg-red-500 rounded-full status-dot-active"></div>
+                        </div>
+                        <div class="flex justify-between items-start text-center gap-2">
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">Temperature</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">23°C</span>
+                            </div>
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">Humidity</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block text-red-500">90%</span>
+                            </div>
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">pH Level</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">6.5</span>
+                            </div>
+                        </div>
+                        <p class="last-updated text-xs text-gray-400 mt-6 text-center">Last Updated: <span class="font-semibold">Just now</span></p>
+                    </article>
+                    <!-- Sensor Card 4 -->
+                     <article class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Sensor Delta-4</h2>
+                            <div class="w-3 h-3 bg-emerald-500 rounded-full status-dot-active"></div>
+                        </div>
+                        <div class="flex justify-between items-start text-center gap-2">
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">Temperature</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">20°C</span>
+                            </div>
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">Humidity</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">40%</span>
+                            </div>
+                            <div class="reading flex-1 min-w-0">
+                                <p class="text-sm text-gray-500 truncate">pH Level</p>
+                                <span class="sensor-value text-2xl sm:text-xl font-bold mt-1 block">7.0</span>
+                            </div>
+                        </div>
+                        <p class="last-updated text-xs text-gray-400 mt-6 text-center">Last Updated: <span class="font-semibold">Just now</span></p>
+                    </article>
+                </section>
+
+                <!-- Summary Grid -->
+                <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Sensor Health Card -->
+                    <article class="lg:col-span-1 bg-white rounded-xl shadow-md p-6">
+                         <h2 class="text-xl font-semibold mb-4">Overall Field Health</h2>
+                         <div class="flex items-center justify-center gap-6">
+                            <div class="relative w-40 h-40">
+                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                    <path class="text-gray-200" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path id="health-circle" class="text-emerald-500" stroke-width="3" fill="none" stroke-dasharray="87, 100" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                 <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                     <span id="health-score" class="text-4xl font-bold">87</span>
+                                     <span id="health-status-text" class="text-sm text-gray-500">Excellent</span>
+                                </div>
+                            </div>
+                         </div>
+                         <p class="text-sm text-gray-500 text-center mt-4">All systems are operating within optimal parameters.</p>
+                    </article>
+
+                    <!-- Field Heatmap Card -->
+                    <article class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-4">Field Moisture Heatmap</h2>
+                        <div class="heatmap grid grid-cols-10 sm:grid-cols-20 grid-rows-8 gap-1 h-52">
+                            <!-- Heatmap cells will be generated by JS -->
+                        </div>
+                    </article>
+                </section>
+            </main>
+        </div>
+    </div>
+
+<script>
+    // === Mobile Sidebar Toggle ===
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    function toggleSidebar() {
+        mobileSidebar.classList.toggle('-translate-x-full');
+        sidebarOverlay.classList.toggle('hidden');
+    }
+
+    hamburgerBtn.addEventListener('click', toggleSidebar);
+    sidebarOverlay.addEventListener('click', toggleSidebar);
+
+    // === Live Date & Time ===
+    function updateDateTime() {
+        const now = new Date();
+        const dateEl = document.querySelector('#date-time .font-semibold');
+        const timeEl = document.querySelector('#date-time .text-sm');
+        if (dateEl && timeEl) {
+           const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+           dateEl.textContent = now.toLocaleDateString('en-US', options);
+           timeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // === Simulate Live Sensor Data & Health Score ===
+    const healthScoreEl = document.getElementById('health-score');
+    const healthStatusTextEl = document.getElementById('health-status-text');
+    const healthCircle = document.getElementById('health-circle');
+
+    function updateSensorData() {
+        const sensorValues = document.querySelectorAll('.sensor-value');
+        sensorValues.forEach(el => {
+            const currentValue = parseFloat(el.textContent);
+            let randomChange = (Math.random() - 0.5);
+            if (!el.textContent.includes('.')) randomChange = Math.round(randomChange);
+            
+            let newValue;
+            if (el.textContent.includes('%')) {
+                newValue = (currentValue + randomChange * 2).toFixed(0);
+                if(newValue > 100) newValue = 100;
+                el.textContent = newValue + '%';
+            } else if (el.textContent.includes('°C')) {
+                 newValue = (currentValue + randomChange * 0.5).toFixed(0);
+                 el.textContent = newValue + '°C';
+            } else {
+                 newValue = (currentValue + randomChange * 0.1).toFixed(1);
+                 el.textContent = newValue;
+            }
+             if(parseFloat(newValue) < 0) el.textContent = (0).toFixed(el.textContent.includes('.') ? 1 : 0) + (el.textContent.includes('%') ? '%' : el.textContent.includes('°C') ? '°C' : '');
+        });
+
+        // Update health score
+        let currentScore = parseInt(healthScoreEl.textContent);
+        let newScore = currentScore + Math.round((Math.random() - 0.5) * 2);
+        if (newScore > 100) newScore = 100;
+        if (newScore < 0) newScore = 0;
+        healthScoreEl.textContent = newScore;
+        
+        // Update health status text and circle color
+        if (newScore > 80) {
+            healthStatusTextEl.textContent = 'Excellent';
+            healthCircle.classList.remove('text-orange-500', 'text-red-500');
+            healthCircle.classList.add('text-emerald-500');
+        } else if (newScore > 60) {
+            healthStatusTextEl.textContent = 'Good';
+            healthCircle.classList.remove('text-emerald-500', 'text-red-500');
+            healthCircle.classList.add('text-orange-500');
+        } else {
+            healthStatusTextEl.textContent = 'Warning';
+             healthCircle.classList.remove('text-emerald-500', 'text-orange-500');
+            healthCircle.classList.add('text-red-500');
+        }
+        healthCircle.style.strokeDasharray = `${newScore}, 100`;
+
+    }
+    setInterval(updateSensorData, 3000); // Update every 3 seconds
+
+    // === Generate and Update Heatmap ===
+    const heatmap = document.querySelector('.heatmap');
+    const colors = ['bg-blue-200', 'bg-cyan-300', 'bg-green-400', 'bg-yellow-400', 'bg-orange-500', 'bg-red-600'];
+    
+    function generateHeatmap() {
+        heatmap.innerHTML = ''; // Clear existing cells
+        for (let i = 0; i < 160; i++) {
+            const cell = document.createElement('div');
+            const colorClass = colors[Math.floor(Math.random() * colors.length)];
+            cell.className = `heatmap-cell rounded-sm ${colorClass} transition-colors duration-500`;
+            cell.title = `Moisture: ${(Math.random() * 100).toFixed(0)}%`; // Add a tooltip
+            heatmap.appendChild(cell);
+        }
+    }
+    generateHeatmap();
+    setInterval(generateHeatmap, 5000); // Regenerate heatmap every 5 seconds for dynamic effect
+</script>
+
+</body>
+</html>
+

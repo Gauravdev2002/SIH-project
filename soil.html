@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri Nova - Soil Intelligence Dashboard</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Chart.js for beautiful charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Custom font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* A softer background color */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="flex h-screen">
+        <!-- === SIDE NAVIGATION === -->
+        <aside class="w-64 bg-white shadow-lg flex flex-col">
+            <div class="p-6 text-2xl font-bold text-emerald-700 border-b">
+                 <a href="index.html"><i class="fa-solid fa-leaf mr-2"></i>Agri Nova</a>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="sensor.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-sliders w-6 mr-3"></i>Sensors
+                </a>
+                <a href="soil.html" class="flex items-center p-3 rounded-lg text-white bg-emerald-600 font-semibold shadow">
+                    <i class="fa-solid fa-seedling w-6 mr-3"></i>Soil Health
+                </a>
+                <a href="pest.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bug w-6 mr-3"></i>Pest Control
+                </a>
+                <a href="weather.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-cloud-sun-rain w-6 mr-3"></i>Weather
+                </a>
+                <a href="alerts.html" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-bell w-6 mr-3"></i>Alerts
+                </a>
+            </nav>
+            <div class="p-4 border-t">
+                 <a href="#" class="flex items-center p-3 rounded-lg text-gray-600 hover:bg-emerald-50">
+                    <i class="fa-solid fa-right-from-bracket w-6 mr-3"></i>Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- === MAIN CONTENT === -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <!-- Header section -->
+            <header class="flex flex-wrap justify-between items-center gap-4 mb-8">
+                <div>
+                    <h1 class="text-4xl font-bold">Soil Intelligence</h1>
+                    <p class="text-gray-500 mt-1">A deep dive into your soil's composition and health.</p>
+                </div>
+                 <div class="flex items-center gap-4">
+                    <div id="date-time" class="text-right text-gray-600">
+                        <div class="font-semibold text-lg">Saturday, 13 Sep 2025</div>
+                        <div class="text-sm">11:33 AM</div>
+                    </div>
+                     <a href="gps.html" class="bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-emerald-700 transition duration-300 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot"></i> Your Location
+                    </a>
+                </div>
+            </header>
+
+            <!-- KPI Cards -->
+            <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
+                <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center">
+                    <div class="text-emerald-500 text-2xl mb-2"><i class="fa-solid fa-seedling"></i></div>
+                    <p class="text-sm text-gray-500">Nutrients</p>
+                    <p class="text-3xl font-bold">85</p>
+                    <p class="text-xs text-green-600 font-semibold">Good</p>
+                </div>
+                <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center">
+                    <div class="text-orange-500 text-2xl mb-2"><i class="fa-solid fa-flask-vial"></i></div>
+                    <p class="text-sm text-gray-500">pH Level</p>
+                    <p class="text-3xl font-bold">5.8</p>
+                    <p class="text-xs text-orange-600 font-semibold">Slightly Acidic</p>
+                </div>
+                <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center">
+                     <div class="text-blue-500 text-2xl mb-2"><i class="fa-solid fa-temperature-half"></i></div>
+                    <p class="text-sm text-gray-500">Temperature</p>
+                    <p class="text-3xl font-bold">22°C</p>
+                    <p class="text-xs text-green-600 font-semibold">Normal</p>
+                </div>
+                 <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center">
+                    <div class="text-sky-500 text-2xl mb-2"><i class="fa-solid fa-water"></i></div>
+                    <p class="text-sm text-gray-500">Salinity</p>
+                    <p class="text-3xl font-bold">3<span class="text-base">dS/m</span></p>
+                    <p class="text-xs text-orange-600 font-semibold">Moderate</p>
+                </div>
+                 <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center">
+                     <div class="text-amber-600 text-2xl mb-2"><i class="fa-solid fa-layer-group"></i></div>
+                    <p class="text-sm text-gray-500">Soil Texture</p>
+                    <p class="text-3xl font-bold">Loam</p>
+                    <p class="text-xs text-green-600 font-semibold">Ideal</p>
+                </div>
+                <div class="kpi-card bg-white p-4 rounded-xl shadow-md text-center">
+                     <div class="text-cyan-500 text-2xl mb-2"><i class="fa-solid fa-droplet"></i></div>
+                    <p class="text-sm text-gray-500">Humidity</p>
+                    <p class="text-3xl font-bold">30%</p>
+                    <p class="text-xs text-green-600 font-semibold">Optimal</p>
+                </div>
+            </section>
+
+            <!-- Main Dashboard Grid -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Recommendations Card (Left Column) -->
+                <article class="lg:col-span-1 bg-white rounded-xl shadow-md p-6">
+                    <h2 class="text-xl font-semibold mb-4">Actionable Recommendations</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4">
+                            <div class="bg-orange-100 text-orange-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-flask-vial"></i></div>
+                            <p class="text-sm text-gray-600">Soil pH is slightly acidic (5.8). Apply 20 kg/acre lime to balance.</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                             <div class="bg-red-100 text-red-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-arrow-down"></i></div>
+                            <p class="text-sm text-gray-600">Nitrogen deficiency detected. Recommended: Urea 50 kg/acre within 2 weeks.</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="bg-cyan-100 text-cyan-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-droplet"></i></div>
+                            <p class="text-sm text-gray-600">Moisture stress in 30% of fields. Suggest irrigation in affected zones.</p>
+                        </li>
+                         <li class="flex items-start gap-4">
+                            <div class="bg-sky-100 text-sky-600 p-2 rounded-full h-8 w-8 text-center"><i class="fa-solid fa-water"></i></div>
+                            <p class="text-sm text-gray-600">Salinity rising above threshold. Introduce gypsum treatment.</p>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- Charts (Right Column) -->
+                <div class="lg:col-span-2 space-y-6">
+                     <article class="bg-white rounded-xl shadow-md p-6">
+                         <h2 class="text-xl font-semibold mb-4">Nutrient Level Over Time</h2>
+                         <canvas id="nutrientLineChart"></canvas>
+                     </article>
+                      <article class="bg-white rounded-xl shadow-md p-6">
+                         <h2 class="text-xl font-semibold mb-4">Nutrient Composition</h2>
+                         <canvas id="nutrientBarChart"></canvas>
+                     </article>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+    // === Live Date & Time ===
+    function updateDateTime() {
+        const now = new Date();
+        const dateEl = document.querySelector('#date-time .font-semibold');
+        const timeEl = document.querySelector('#date-time .text-sm');
+
+        const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+        dateEl.textContent = now.toLocaleDateString('en-US', options);
+        timeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+    
+    // === Chart.js Initializations ===
+    const lineCtx = document.getElementById('nutrientLineChart').getContext('2d');
+    const nutrientLineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Nitrogen (N)',
+                data: [65, 59, 80, 81, 56, 55],
+                borderColor: 'rgb(59, 130, 246)',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                fill: true,
+                tension: 0.4
+            }, {
+                label: 'Phosphorus (P)',
+                data: [28, 48, 40, 19, 86, 27],
+                borderColor: 'rgb(234, 179, 8)',
+                backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                fill: true,
+                tension: 0.4
+            }, {
+                label: 'Potassium (K)',
+                data: [45, 25, 55, 70, 49, 60],
+                borderColor: 'rgb(16, 185, 129)',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'top' } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    const barCtx = document.getElementById('nutrientBarChart').getContext('2d');
+    const nutrientBarChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Nitrogen', 'Phosphorus', 'Potassium'],
+            datasets: [{
+                label: 'Nutrient Composition (%)',
+                data: [55, 80, 45],
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(234, 179, 8, 0.7)',
+                    'rgba(16, 185, 129, 0.7)'
+                ],
+                borderColor: [
+                    'rgb(59, 130, 246)',
+                    'rgb(234, 179, 8)',
+                    'rgb(16, 185, 129)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, max: 100 } }
+        }
+    });
+
+</script>
+
+</body>
+</html>
+
